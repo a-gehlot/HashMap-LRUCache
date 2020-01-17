@@ -17,12 +17,19 @@ class Node
     # optional but useful, connects previous link to next link
     # and removes self from list.
     @prev.next = @next
-    @nex.prev = @prev
+    @next.prev = @prev
   end
 end
 
 class LinkedList
+  include Enumerable
+  
+  attr_accessor :head, :tail
   def initialize
+    @head = Node.new("head")
+    @tail = Node.new("tail")
+    @head.next = @tail
+    @tail.prev = @head
   end
 
   def [](i)
@@ -31,30 +38,67 @@ class LinkedList
   end
 
   def first
+    @head.next
   end
 
   def last
+    @tail.prev
   end
 
   def empty?
+    @head.next == @tail && @tail.prev == @head
   end
 
   def get(key)
+    pointer = @head
+    until pointer.key == key
+      pointer = pointer.next
+      return nil if pointer == nil
+    end
+    pointer.val
   end
 
   def include?(key)
+    pointer = @head
+    until pointer.key == key
+      pointer = pointer.next
+      return false if pointer == nil
+    end
+    true
   end
 
   def append(key, val)
+    new_node = Node.new(key, val)
+    @tail.prev.next = new_node
+    new_node.prev = @tail.prev
+    @tail.prev = new_node
   end
 
   def update(key, val)
+    pointer = @head
+    until pointer.key == key
+      pointer = pointer.next
+      return nil if pointer == nil
+    end
+    pointer.val = val
   end
 
   def remove(key)
+    pointer = @head
+    until pointer.key == key
+      pointer = pointer.next
+      return nil if pointer == nil
+    end
+    pointer.remove
   end
 
   def each
+    array = []
+    pointer = @head.next
+    until pointer == nil
+      yield pointer
+      pointer = pointer.next
+    end
   end
 
   # uncomment when you have `each` working and `Enumerable` included
