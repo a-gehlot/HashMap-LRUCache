@@ -70,12 +70,13 @@ class LinkedList
     new_node = Node.new(key, val)
     @tail.prev.next = new_node
     new_node.prev = @tail.prev
+    new_node.next = @tail
     @tail.prev = new_node
   end
 
   def update(key, val)
     self.each do |k|
-      k.val = val if key == k.key
+      return k.val = val if key == k.key
     end
     nil
   end
@@ -83,16 +84,15 @@ class LinkedList
   def remove(key)
     pointer = @head
     until pointer.key == key
-      pointer = pointer.next
       return nil if pointer == nil
+      pointer = pointer.next
     end
     pointer.remove
   end
 
   def each
-    array = []
     pointer = @head.next
-    until pointer == nil
+    until pointer.next == nil
       yield pointer
       pointer = pointer.next
     end
