@@ -50,21 +50,20 @@ class LinkedList
   end
 
   def get(key)
-    pointer = @head
-    until pointer.key == key
-      pointer = pointer.next
-      return nil if pointer == nil
+    # pointer = @head
+    # until pointer.key == key
+    #   pointer = pointer.next
+    #   return nil if pointer == nil
+    # end
+    # pointer.val
+    self.each do |k|
+      return k.val if key == k.key
     end
-    pointer.val
+    nil
   end
 
   def include?(key)
-    pointer = @head
-    until pointer.key == key
-      pointer = pointer.next
-      return false if pointer == nil
-    end
-    true
+    self.any? { |k| k.key == key }
   end
 
   def append(key, val)
@@ -75,12 +74,10 @@ class LinkedList
   end
 
   def update(key, val)
-    pointer = @head
-    until pointer.key == key
-      pointer = pointer.next
-      return nil if pointer == nil
+    self.each do |k|
+      k.val = val if key == k.key
     end
-    pointer.val = val
+    nil
   end
 
   def remove(key)
@@ -101,8 +98,8 @@ class LinkedList
     end
   end
 
-  # uncomment when you have `each` working and `Enumerable` included
-  # def to_s
-  #   inject([]) { |acc, link| acc << "[#{link.key}, #{link.val}]" }.join(", ")
-  # end
+  #uncomment when you have `each` working and `Enumerable` included
+  def to_s
+    inject([]) { |acc, link| acc << "[#{link.key}, #{link.val}]" }.join(", ")
+  end
 end
